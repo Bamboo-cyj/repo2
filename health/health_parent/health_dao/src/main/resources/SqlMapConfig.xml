@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!--
+     <settings>
+        &lt;!&ndash;开启二级缓存&ndash;&gt;
+        <setting name="cacheEnabled" value="true"/>
+        &lt;!&ndash;打开延迟加载的开关&ndash;&gt;
+        <setting name="lazyLoadingEnabled" value="true"/>
+        &lt;!&ndash;将积极加载改为消息加载，即按需加载&ndash;&gt;
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+-->
+
+  <!--  <typeAliases>
+        <package name="com.fengk.pojo"/>
+    </typeAliases>-->
+
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="mysql"/>
+        </plugin>
+    </plugins>
+ <!--   mapper包必须要在插件下面-->
+<!--    <mappers>
+        &lt;!&ndash;引入映射文件; resource属性: 映射文件的路径&ndash;&gt;
+        &lt;!&ndash;  <mapper resource="com/fengk/dao/UserDao.xml"/>&ndash;&gt;
+        <package name="com.fengk.dao"></package>
+
+    </mappers>-->
+</configuration>
