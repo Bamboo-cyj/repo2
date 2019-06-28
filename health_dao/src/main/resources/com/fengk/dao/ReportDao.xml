@@ -11,4 +11,13 @@
     <select id="getHotSetMeal" resultType="Map">
         SELECT s.name,COUNT(*) setmeal_count,COUNT(*)/(SELECT COUNT(*) from t_order) proportion from t_order o,t_setmeal s WHERE o.setmeal_id=s.id GROUP BY o.setmeal_id ORDER BY COUNT(*) DESC LIMIT 0,4
     </select>
+    <select id="getMemberSexReport" resultType="Map">
+SELECT sex name,COUNT(*) value FROM t_member GROUP BY sex
+    </select>
+    <select id="getAgeNull" resultType="int">
+SELECT COUNT(*) FROM t_member WHERE birthday IS NULL
+    </select>
+    <select id="getAgeBetween" parameterType="string" resultType="int">
+        SELECT COUNT(*) FROM t_member WHERE birthday &gt; #{ageEnd} AND birthday  &lt;= #{ageBegin}
+    </select>
 </mapper>

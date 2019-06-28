@@ -29,6 +29,39 @@
                     <div id="chart1" style="height:600px;"></div>
                 </div>
             </div>
+            <!--会员性别-->
+            <div class="content-header">
+                <h1>统计分析<small>性别占比</small></h1>
+                <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item>统计分析</el-breadcrumb-item>
+                    <el-breadcrumb-item>性别占比</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
+            <div class="app-container">
+                <div class="box">
+                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                    <div id="chart2" style="height:600px;"></div>
+                </div>
+            </div>
+           <!-- 会员年龄段-->
+            <div class="content-header">
+                <h1>统计分析<small>年龄占比</small></h1>
+                <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+                    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                    <el-breadcrumb-item>统计分析</el-breadcrumb-item>
+                    <el-breadcrumb-item>年龄占比</el-breadcrumb-item>
+                </el-breadcrumb>
+            </div>
+            <div class="app-container">
+                <div class="box">
+                    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+                    <div id="chart3" style="height:600px;"></div>
+                </div>
+            </div>
+
+
+
         </div>
     </body>
     <!-- 引入组件库 -->
@@ -64,5 +97,94 @@
                                     }]
                                 });
         });
+
+
+        // 基于准备好的dom，初始化echarts实例 ----性别占比
+        var myChart2 = echarts.init(document.getElementById('chart2'));
+
+        // 使用刚指定的配置项和数据显示图表。
+        //myChart.setOption(option);
+
+        axios.get("/report/getMemberSexReport.do").then((res)=>{
+            myChart2.setOption({
+                title : {
+                    text: '会员性别占比',
+                    subtext: '',
+                    x:'center'
+                },
+                tooltip : {//提示框组件
+                    trigger: 'item',//触发类型，在饼形图中为item
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"//提示内容格式
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: res.data.data.memberSexNames
+                },
+                series : [
+                    {
+                        name: '会员性别占比',
+                        type: 'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data:res.data.data.memberSexCount,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            });
+        });
+
+
+
+        // 基于准备好的dom，初始化echarts实例-----年龄占比
+        var myChart3 = echarts.init(document.getElementById('chart3'));
+
+        // 使用刚指定的配置项和数据显示图表。
+        //myChart.setOption(option);
+
+        axios.get("/report/getMemberAgeReport.do").then((res)=>{
+            myChart3.setOption({
+                title : {
+                    text: '会员年龄占比',
+                    subtext: '',
+                    x:'center'
+                },
+                tooltip : {//提示框组件
+                    trigger: 'item',//触发类型，在饼形图中为item
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"//提示内容格式
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: res.data.data.memberAges
+                },
+                series : [
+                    {
+                        name: '会员年龄占比',
+                        type: 'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data:res.data.data.memberAgeCount,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            });
+        });
+
+
+
+
     </script>
 </html>

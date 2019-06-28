@@ -9,4 +9,8 @@ public interface ReportService {
     List<Map> getSetmealReport();
 
     Map getBusinessReportData();
+
+    List<Map> getMemberSexReport();
+
+    List<Map> getMemberAgeReport();
 }

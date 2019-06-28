@@ -2,17 +2,14 @@ package com.fengk.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.fengk.entity.Result;
-
 import com.fengk.service.ReportService;
 import com.fengk.utils.MessageConstant;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +29,60 @@ import java.util.Map;
 public class ReportControl {
     @Reference
     ReportService reportService;
+
+
+    @RequestMapping(value = "/getMemberAgeReport")
+    public Result getMemberAgeReport() {
+        try {
+            Map map = new HashMap<>();
+            List<String> memberAges = new ArrayList<>();
+            List<Map> memberAgeCount = reportService.getMemberAgeReport();
+            for (Map map1 : memberAgeCount) {
+                String name = (String) map1.get("name");
+
+                memberAges.add(name);
+            }
+
+            map.put("memberAges", memberAges);
+            map.put("memberAgeCount", memberAgeCount);
+            System.out.println("memberAge"+map);
+            return new Result(true, MessageConstant.GET_BUSINESS_REPORT_SUCCESS, map);
+        } catch (RuntimeException runtimeException) {
+            runtimeException.printStackTrace();
+            return new Result(false, runtimeException.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.GET_BUSINESS_REPORT_FAIL);
+
+        }
+    }
+
+
+    @RequestMapping(value = "/getMemberSexReport")
+    public Result getMemberSexReport() {
+        try {
+            Map map = new HashMap<>();
+            List<String> memberSexNames = new ArrayList<>();
+            List<Map> memberSexCount = reportService.getMemberSexReport();
+            for (Map map1 : memberSexCount) {
+                String name = (String) map1.get("name");
+                memberSexNames.add(name);
+            }
+
+            map.put("memberSexNames", memberSexNames);
+            map.put("memberSexCount", memberSexCount);
+            System.out.println("memberSex"+map);
+            return new Result(true, MessageConstant.GET_BUSINESS_REPORT_SUCCESS, map);
+        } catch (RuntimeException runtimeException) {
+            runtimeException.printStackTrace();
+            return new Result(false, runtimeException.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.GET_BUSINESS_REPORT_FAIL);
+
+        }
+    }
+
 
     @RequestMapping(value = "/getMemberReport")
     public Result getMemberReport() {
@@ -60,7 +111,7 @@ public class ReportControl {
             }
             map.put("setmealNames", setmealNames);
             map.put("setmealCount", setmealCount);
-
+            System.out.println("setmealreport"+map);
             return new Result(true, MessageConstant.GET_BUSINESS_REPORT_SUCCESS, map);
         } catch (RuntimeException runtimeException) {
             runtimeException.printStackTrace();
