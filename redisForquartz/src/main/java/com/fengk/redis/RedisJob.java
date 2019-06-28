@@ -50,10 +50,12 @@ return  code;
     }
 
     public Object getSetmeal(String redisMealName) {
-        return null;
+
+
+        return jedisPool.getResource().get(redisMealName);
     }
 
     public void add(String redisMealName, String toJSONString) {
-
+        jedisPool.getResource().set(redisMealName,toJSONString);
     }
 }

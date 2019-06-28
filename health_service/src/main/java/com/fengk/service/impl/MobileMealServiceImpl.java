@@ -41,11 +41,17 @@ public class MobileMealServiceImpl implements MobileMealService {
     @Override
     public Setmeal findById(Integer id) {
 
-        Setmeal mobileMealDaoById = mobileMealDao.findById(id);
 
-        System.out.println(mobileMealDaoById);
+        String redisMealName = "MealId_"+id;
+        Setmeal mobileMealDaoById = null;
+        Object allMeal = redisJob.getSetmeal(redisMealName);
+        if (allMeal == null) {
+            mobileMealDaoById = mobileMealDao.findById(id);
 
-
+            redisJob.add(redisMealName,JSON.toJSONString(mobileMealDaoById));
+        } else {
+            mobileMealDaoById = JSON.parseObject((String)allMeal,Setmeal.class);
+        }
         return mobileMealDaoById;
     }
 }
