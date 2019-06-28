@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+<!--指定应用名称-->
+<dubbo:application name="health_service"></dubbo:application>
+    <!--暴露服务的端口 默认为20880-->
+    <dubbo:protocol name="dubbo" port="20880"></dubbo:protocol>
+    <!--使用zookeeper作为注册中心-->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1" port="2181"></dubbo:registry>
+    <!--使用注解方式连接dubbo并指定包范围-->
+    <dubbo:annotation package="com.fengk.service"></dubbo:annotation>
+
+    <dubbo:provider timeout="600000"></dubbo:provider>
+    <bean id="myAdvice" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--<tx:advice id="transactionM" transaction-manager="myAdvice">
+        <tx:attributes>
+            &lt;!&ndash;<tx:method name="tran*" isolation="DEFAULT" propagation="REQUIRED"/>&ndash;&gt;
+            <tx:method name="sa*" isolation="DEFAULT" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+
+        <aop:pointcut id="myPointcut" expression="execution(* com.fengk.service..*.*(..))"/>
+        <aop:advisor advice-ref="transactionM" pointcut-ref="myPointcut"></aop:advisor>
+    </aop:config>-->
+<!--<import resource="classpath:applicationContext_Dao.xml"></import>-->
+    <!--开启注解的方式使用事务-->
+    <tx:annotation-driven transaction-manager="myAdvice" proxy-target-class="true"></tx:annotation-driven>
+    <!--开启aop的注解支持-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+</beans>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengk.dao.MobileMealDao">
+    <!--设置当前的namespace开启二级缓存-->
+    <cache></cache>
+
+    <!--useCache="true" 表示开启二级缓存,适应放置到二级缓存的数据：经常不会发生变化的数据，例如地区编码
+不适合放置到二级缓存的数据：经常变化的数据
+财务数据-->
+
+    <!--不用value的情况下解决方案在queryByString前加@param,见dao接口-->
+    <select id="getSetmeal" resultType="com.fengk.pojo.Setmeal">
+        select * from t_setmeal
+    </select>
+<select id="findById" parameterType="int" resultMap="getCheckGroup">
+    select * from t_setmeal where id=#{id}
+</select>
+<resultMap id="getCheckGroup" type="com.fengk.pojo.Setmeal">
+    <id column="id" property="id"/>
+    <result column="name" property="name"/>
+    <result column="code" property="code"/>
+    <result column="helpCode" property="helpCode"/>
+    <result column="sex" property="sex"/>
+    <result column="age" property="age"/>
+    <result column="price" property="price"/>
+    <result column="remark" property="remark"/>
+    <result column="attention" property="attention"/>
+    <result column="img" property="img"/>
+    <collection property="checkGroups" ofType="com.fengk.pojo.CheckGroup" column="id" select="com.fengk.dao.CheckGroupDao.findCheckGroupsById"></collection>
+</resultMap>
+</mapper>

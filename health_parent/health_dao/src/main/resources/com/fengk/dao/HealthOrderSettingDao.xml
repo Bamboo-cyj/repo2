@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengk.dao.HealthOrderSettingDao">
+    <!--设置当前的namespace开启二级缓存-->
+    <cache></cache>
+       <!--useCache="true" 表示开启二级缓存,适应放置到二级缓存的数据：经常不会发生变化的数据，例如地区编码
+不适合放置到二级缓存的数据：经常变化的数据
+财务数据-->
+
+  <select id="findLength" resultType="long" parameterType="String">
+      select count(*) from t_ordersetting  WHERE orderDate = #{value}
+  </select>
+    <insert id="add" parameterType="Map">
+        insert into t_ordersetting
+      		(orderDate,number,reservations)
+                      values
+      		(#{orderDate},#{number},#{reservations})
+    </insert>
+    <update id="update" parameterType="Map">
+        update t_ordersetting set number= #{number} where orderDate = #{orderDate}
+    </update>
+    <select id="findAll" resultType="com.fengk.pojo.OrderSetting" parameterType="String">
+        select * from t_ordersetting where orderDate like #{value}
+    </select>
+    <select id="findOrderSettingByDate" parameterType="String" resultType="com.fengk.pojo.OrderSetting">
+        select * from t_ordersetting where orderDate = #{value}
+    </select>
+    <select id="addCount" parameterType="String">
+        update t_ordersetting set reservations=reservations+1 where orderDate= #{value}
+    </select>
+</mapper>
