@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengk.dao.HealthMenuDao">
+
+    <select id="findPageByCondition" parameterType="String" resultType="com.fengk.pojo.Menu">
+        select * from t_menu
+        <if test="queryByString != null and queryByString !='' and queryByString.length>0">
+            <where>
+                code like #{queryByString} or name like #{queryByString}
+            </where>
+        </if>
+    </select>
+
+
+    <insert id="add" parameterType="com.fengk.pojo.Menu">
+        insert into t_menu(id,title,linkUrl,path,priority,icon,description,parentMenuId) values (null,#{title},#{linkUrl},#{path},#{priority},#{icon},#{description},#{parentMenuId})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from t_menu where id=#{id}
+    </delete>
+
+    <update id="edit" parameterType="com.fengk.pojo.Menu">
+        update t_menu
+        <set>
+            <if test="title != null">
+                title = #{title},
+            </if>
+            <if test="linkUrl != null">
+                linkUrl = #{linkUrl},
+            </if>
+            <if test="path != null">
+                path = #{path},
+            </if>
+            <if test="priority != null">
+                priority = #{priority},
+            </if>
+            <if test="icon != null">
+                icon = #{icon},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="parentMenuId != null">
+                parentMenuId = #{parentMenuId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <select id="findById" parameterType="int" resultType="com.fengk.pojo.Menu">
+        select * from t_menu where id=#{id}
+    </select>
+
+    <select id="findAll" resultType="com.fengk.pojo.Menu">
+        select * from t_menu
+    </select>
+</mapper>

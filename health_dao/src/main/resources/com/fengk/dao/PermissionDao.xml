@@ -7,5 +7,47 @@
     <select id="getPermissions" parameterType="Integer" resultType="com.fengk.pojo.Permission">
         select * from t_permission p,t_role_permission rp where p.id=rp.permission_id and rp.role_id=#{id}
     </select>
+    <select id="findPageByCondition" parameterType="String" resultType="com.fengk.pojo.Permission">
+        select * from t_permission
+        <if test="queryByString != null and queryByString !='' and queryByString.length>0">
+            <where>
+                code like #{queryByString} or name like #{queryByString}
+            </where>
+        </if>
+    </select>
+
+
+    <insert id="add" parameterType="com.fengk.pojo.Permission">
+        insert into t_permission(id,name,keyword,description) values (null,#{name},#{keyword},#{description})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from t_permission where id=#{id}
+    </delete>
+
+    <update id="edit" parameterType="com.fengk.pojo.Permission">
+        update t_permission
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <select id="findById" parameterType="int" resultType="com.fengk.pojo.Permission">
+        select * from t_permission where id=#{id}
+    </select>
+
+    <select id="findAll" resultType="com.fengk.pojo.Permission">
+        select * from t_permission
+    </select>
 
 </mapper>

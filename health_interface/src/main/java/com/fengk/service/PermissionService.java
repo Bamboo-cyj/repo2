@@ -1,12 +1,13 @@
-package com.fengk.dao;
+package com.fengk.service;
 
+import com.fengk.entity.PageResult;
+import com.fengk.entity.QueryPageBean;
 import com.fengk.pojo.Permission;
-import com.github.pagehelper.Page;
 
 import java.util.List;
 
-public interface PermissionDao {
-    Page<Permission> findPageByCondition(String queryString);
+public interface PermissionService {
+    PageResult findPage(QueryPageBean queryPageBean);
 
     void add(Permission permission);
 
