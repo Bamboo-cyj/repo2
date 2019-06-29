@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengk.dao.MemberManagerDao">
+    <!--设置当前的namespace开启二级缓存-->
+    <cache></cache>
+    <!--  <select id="findTuser" resultType="com.fengk.bean.Tuser">
+          select * from t_user;
+      </select>-->
+
+
+    <!--useCache="true" 表示开启二级缓存,适应放置到二级缓存的数据：经常不会发生变化的数据，例如地区编码
+不适合放置到二级缓存的数据：经常变化的数据
+财务数据-->
+
+<!--不用value的情况下解决方案在queryByString前加@param,见dao接口-->
+    <select id="findPageByCondition" parameterType="String" resultType="com.fengk.pojo.Member">
+        select * from t_member
+        <if test="value != null and value !='' and value.length>0">
+            <where>
+                fileNumber like #{value} or name like #{value} or phoneNumber like #{value} or remark like #{value}
+            </where>
+        </if>
+    </select>
+    <select id="findAllItems" resultType="com.fengk.pojo.MemberGroup">
+        select * from t_membergroup
+    </select>
+
+    <insert id="addGroupMemberById" parameterType="java.util.HashMap">
+        INSERT INTO t_member_group VALUES (#{member_groupId},#{memberId})
+    </insert>
+
+    <delete id="deleteGroupMemberById" parameterType="int">
+        delete from t_member_group where memberId=#{id}
+    </delete>
+
+    <update id="edit" parameterType="com.fengk.pojo.Member" >
+        update t_member
+        <set>
+            <if test="fileNumber != null">
+            fileNumber = #{fileNumber},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="idCard != null">
+                idCard = #{idCard},
+            </if>
+            <if test="phoneNumber != null">
+                phoneNumber = #{phoneNumber},
+            </if>
+            <if test="regTime != null">
+                regTime = #{regTime},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="regTime != null">
+                birthday = #{birthday},
+            </if>
+
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <insert id="add" parameterType="com.fengk.pojo.Member" keyProperty="id" useGeneratedKeys="true">
+    insert into t_member (fileNumber,name,sex,idCard,phoneNumber,regTime,password,email,birthday,remark)
+            values
+      	(#{fileNumber},#{name},#{sex},#{idCard},#{phoneNumber},#{regTime},#{password},#{email},#{birthday},#{remark})
+</insert>
+
+    <delete id="deletememberById" parameterType="int">
+        delete from t_member where id=#{id}
+    </delete>
+
+
+    <select id="getMemberGroupItemById" parameterType="int" resultType="int">
+        select member_groupId from t_member_group where memberId=#{id}
+    </select>
+<select id="getMemberById" parameterType="int" resultType="com.fengk.pojo.Member">
+    select * from t_member where id=#{id}
+</select>
+
+
+
+
+
+
+</mapper>

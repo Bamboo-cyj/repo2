@@ -382,6 +382,11 @@ this.dialogFormVisible4Edit=true;
                                 type: response.data.flag ? 'success' : 'error'
                             });
                             this.findPage();
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                            });
                         });
 
                     }).catch(() => {
@@ -416,6 +421,16 @@ axios.get("/checkGroup/getCheckGroupById.do?id="+id).then(response=>{
                             });
                         }
                     })
+                },
+                showMessage(r){
+                    if(r == 'Error: Request failed with status code 403'){
+                        //权限不足
+                        this.$message.error('无访问权限');
+                        return;
+                    }else{
+                        this.$message.error('未知错误');
+                        return;
+                    }
                 }
             }
         })

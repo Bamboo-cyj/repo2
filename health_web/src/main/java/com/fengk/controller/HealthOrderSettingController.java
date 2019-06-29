@@ -10,6 +10,7 @@ import com.fengk.utils.ExcelUtil.ExcelUtil;
 import com.fengk.utils.MessageConstant;
 
 import com.fengk.utils.POIUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +35,7 @@ public class HealthOrderSettingController {
     HealthOrderSettingService healthOrderSettingService;
 
     @RequestMapping(value = "/editNumberByDate")
+
     public Result editNumberByDate(@RequestBody OrderSetting orderSetting) {
         System.out.println(orderSetting+"获取的");
         try {
@@ -48,6 +50,7 @@ healthOrderSettingService.upload(orderSetting);
     }
 
     @RequestMapping(value = "/upload")
+
     public Result upload(@RequestParam("excelFile")MultipartFile excelFile) {
         System.out.println(excelFile.getOriginalFilename());
         try {
@@ -75,6 +78,7 @@ healthOrderSettingService.upload(orderSetting);
         }
 
     }
+
     public void uploadFile(MultipartFile excelFile){
 
         List<String[]> readExcel = null;

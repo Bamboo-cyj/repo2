@@ -5,7 +5,7 @@
 
 
     <select id="getPermissions" parameterType="Integer" resultType="com.fengk.pojo.Permission">
-        select * from t_permission p,t_role_permission rp where p.id=rp.role_id and rp.permission_id=#{id}
+        select * from t_permission p,t_role_permission rp where p.id=rp.permission_id and rp.role_id=#{id}
     </select>
 
 </mapper>

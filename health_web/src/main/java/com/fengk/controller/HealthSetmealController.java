@@ -12,6 +12,7 @@ import com.fengk.utils.MessageConstant;
 import com.fengk.utils.QiniuUtils;
 import com.fengk.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,6 +33,7 @@ public class HealthSetmealController {
 
 
     @RequestMapping(value = "/upload")
+
     public Result upload(MultipartFile imgFile){
         try {
             String filename = imgFile.getOriginalFilename();
@@ -64,6 +66,7 @@ try {
     }
 
     @RequestMapping(value = "/add")
+
     public Result add(@RequestBody Setmeal setmeal, Integer[] checkgroupIds){
         try {
             healthSetmealService.add(setmeal,checkgroupIds);

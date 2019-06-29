@@ -9,6 +9,7 @@ import com.fengk.pojo.CheckGroup;
 import com.fengk.service.HealthCheckGroupService;
 
 import com.fengk.utils.MessageConstant;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +40,7 @@ try {
     }
 
     @RequestMapping(value = "/add")
+
     public Result add(@RequestBody CheckGroup checkGroup,Integer[] checkitemIds){
         try {
             healthCheckGroupService.add(checkGroup,checkitemIds);
@@ -55,6 +57,7 @@ try {
         }
     }
     @RequestMapping(value = "/delete")
+
     public Result delete(Integer id){
         try {
             healthCheckGroupService.delete(id);

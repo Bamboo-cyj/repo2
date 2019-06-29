@@ -45,7 +45,7 @@ try {
 }
     }
     @RequestMapping(value = "/add")
-    @PreAuthorize("hasRole('admin')")
+
     public Result add(@RequestBody CheckItem checkItem){
         try {
             healthCheckService.add(checkItem);
@@ -61,6 +61,7 @@ try {
         }
     }
     @RequestMapping(value = "/delete")
+    @PreAuthorize("hasAnyAuthority('CHECKITEM_DELETE')")
     public Result delete(Integer id){
         try {
             healthCheckService.delete(id);
@@ -91,6 +92,7 @@ try {
         }
     }
     @RequestMapping(value = "/edit")
+
     public Result edit(@RequestBody CheckItem checkItem){
         try {
            healthCheckService.edit(checkItem);

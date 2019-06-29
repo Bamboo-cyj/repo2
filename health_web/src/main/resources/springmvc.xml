@@ -49,7 +49,7 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-<import resource="classpath:spring-security.xml"></import>
+<import resource="classpath:spring-security.xml"/>
 
    <!-- <mvc:interceptors>
         <mvc:interceptor>

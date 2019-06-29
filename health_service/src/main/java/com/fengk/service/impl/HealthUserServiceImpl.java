@@ -53,6 +53,7 @@ public class HealthUserServiceImpl implements UserService {
             return null;
         }
         Set<Role> roles = roleDao.getRoles(user.getId());
+        System.out.println(roles);
 
         user.setRoles(roles);
         return user;

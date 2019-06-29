@@ -46,11 +46,14 @@ public class GetUserInfo implements UserDetailsService {
         Set<Role> roles = user.getRoles();
         List<GrantedAuthority> list=new ArrayList<>();
         for (Role role : roles) {
+           list.add(new SimpleGrantedAuthority(role.getKeyword()));
             Set<Permission> permissions = role.getPermissions();
             for (Permission permission : permissions) {
                 list.add(new SimpleGrantedAuthority(permission.getKeyword()));
             }
         }
+
+        System.out.println("权限列表"+list);
         org.springframework.security.core.userdetails.User securityUser=new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),list);
 
 
