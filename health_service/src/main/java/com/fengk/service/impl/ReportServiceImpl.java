@@ -177,4 +177,31 @@ public class ReportServiceImpl implements ReportService {
         System.out.println("service age"+list);
         return list;
     }
+
+    @Override
+    public Map getMemberReportByDate(String dateBegin, String dateEnd) {
+        Map map = new HashMap();
+        List<String> months = null;
+        try {
+            months = DateUtils.getMonthBetween(dateBegin, dateEnd, "yyyy-MM");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        List<Integer> memberCount = new ArrayList<>();
+
+        for (String month : months) {
+
+            memberCount.add(reportDao.getCount(month));
+        }
+        map.put("months", months);
+        map.put("memberCount", memberCount);
+        System.out.println(map);
+        return map;
+
+
+
+
+    }
 }

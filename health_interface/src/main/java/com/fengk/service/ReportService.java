@@ -13,4 +13,6 @@ public interface ReportService {
     List<Map> getMemberSexReport();
 
     List<Map> getMemberAgeReport();
+
+    Map getMemberReportByDate(String dateBegin, String dateEnd);
 }

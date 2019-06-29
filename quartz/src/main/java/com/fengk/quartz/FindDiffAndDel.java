@@ -11,8 +11,11 @@ import org.springframework.stereotype.Component;
 public class FindDiffAndDel {
     @Autowired
     RedisJob redisJob;
+
+
     public void findDiffAndDel(){
 redisJob.findDiffAndDel();
     }
+
 
 }

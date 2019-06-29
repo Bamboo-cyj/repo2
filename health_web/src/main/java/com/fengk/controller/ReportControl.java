@@ -98,6 +98,21 @@ public class ReportControl {
 
         }
     }
+    @RequestMapping(value = "/getMemberReportByDate")
+    public Result getMemberReportByDate(String dateBegin,String dateEnd) {
+        try {
+            Map map = reportService.getMemberReportByDate(dateBegin,dateEnd);
+            System.out.println("会员统计"+map);
+            return new Result(true, MessageConstant.GET_BUSINESS_REPORT_SUCCESS, map);
+        } catch (RuntimeException runtimeException) {
+            runtimeException.printStackTrace();
+            return new Result(false, runtimeException.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.GET_BUSINESS_REPORT_FAIL);
+
+        }
+    }
 
     @RequestMapping(value = "/getSetmealReport")
     public Result getSetmealReport() {

@@ -30,14 +30,40 @@
             <value>0/30 * * * * ?</value>
         </property>
     </bean>
+
+
+    <!--定时清理orderSetting历史数据配置-->
+    <bean id="jobClean"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 注入目标对象 -->
+        <property name="targetObject" ref="cleanHistoryOrderSetting"/>
+        <!-- 注入目标方法 -->
+        <property name="targetMethod" value="cleanHistoryOrderSetting"/>
+    </bean>
+    <!-- 注册一个触发器，指定任务触发的时间 -->
+    <bean id="myTriggerClean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <!-- 注入JobDetail -->
+        <property name="jobDetail" ref="jobClean"/>
+        <!-- 指定触发的时间，基于Cron表达式 -->
+        <property name="cronExpression">
+            <value>0/30 * * * * ?</value>
+            <!--每月最后一天凌晨2点-->
+            <!--<value>0 0 2 L * ? *</value>-->
+        </property>
+    </bean>
+
+
     <!-- 注册一个统一的调度工厂，通过这个调度工厂调度任务 -->
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <!-- 注入多个触发器 -->
         <property name="triggers">
             <list>
+                <ref bean="myTriggerClean"/>
                 <ref bean="myTrigger"/>
+
             </list>
         </property>
     </bean>
-    <import resource="classpath:applicationContext_Redis.xml"></import>
+    <import resource="classpath:applicationContext_Redis.xml"/>
+    <import resource="classpath:applicationContext_Dao.xml"/>
 </beans>
