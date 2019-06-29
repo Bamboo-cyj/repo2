@@ -6,9 +6,9 @@
 
     <select id="findPageByCondition" parameterType="String" resultType="com.fengk.pojo.Menu">
         select * from t_menu
-        <if test="queryByString != null and queryByString !='' and queryByString.length>0">
+        <if test="value != null and value !='' and value.length>0">
             <where>
-                code like #{queryByString} or name like #{queryByString}
+                title like #{value} or description like #{value}
             </where>
         </if>
     </select>

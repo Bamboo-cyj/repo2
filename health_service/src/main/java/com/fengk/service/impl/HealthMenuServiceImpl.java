@@ -41,7 +41,13 @@ public class HealthMenuServiceImpl implements HealthMenuService {
 
     @Override
     public void delete(Integer id) {
-        healthMenuDao.delete(id);
+        try {
+            healthMenuDao.delete(id);
+        } catch(Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException("与角色相关联,无法删除");
+        }
+
     }
 
     @Override
