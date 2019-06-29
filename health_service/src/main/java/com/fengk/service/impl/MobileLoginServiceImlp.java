@@ -40,10 +40,10 @@ public class MobileLoginServiceImlp implements MobileLoginService {
         }
         Member member = memberDao.findByTelephone(telphone);
         if (member==null){
-member=new Member();
-member.setPhoneNumber(telphone);
-member.setRegTime(new Date());
-memberDao.add(member);
+            member=new Member();
+            member.setPhoneNumber(telphone);
+            member.setRegTime(new Date());
+            memberDao.add(member);
         }
     }
 }

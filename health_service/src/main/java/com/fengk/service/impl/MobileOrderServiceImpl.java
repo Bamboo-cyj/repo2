@@ -30,85 +30,77 @@ public class MobileOrderServiceImpl implements MobileOrderService {
     OrderDao orderDao;
     @Autowired
     MemberDao memberDao;
-@Autowired
+    @Autowired
     RedisJob redisJob;
-@Autowired
+    @Autowired
     HealthOrderSettingDao healthOrderSettingDao;
 
     @Override
     public Order submit(Map orderInfo) {
-        String telphone= (String) orderInfo.get("telephone");
-String code=redisJob.getCodeFromRedis(telphone, RedisMessageConstant.SENDTYPE_ORDER);
-if (code==null){
-    throw new RuntimeException("请先获取手机验证码再提交");
-}
-if (!code.equals(orderInfo.get("validateCode"))){
-throw new RuntimeException(MessageConstant.VALIDATECODE_ERROR);
+        String telphone = (String) orderInfo.get("telephone");
+        String code = redisJob.getCodeFromRedis(telphone, RedisMessageConstant.SENDTYPE_ORDER);
+        if (code == null) {
+            throw new RuntimeException("请先获取手机验证码再提交");
+        }
+        if (!code.equals(orderInfo.get("validateCode"))) {
+            throw new RuntimeException(MessageConstant.VALIDATECODE_ERROR);
 
-}
-        String oderDate= (String) orderInfo.get("orderDate");
+        }
+        String oderDate = (String) orderInfo.get("orderDate");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateFormat= null;
+        Date dateFormat = null;
         try {
             dateFormat = simpleDateFormat.parse(oderDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         long length = healthOrderSettingDao.findLength(oderDate);
-        if (length==0){
+        if (length == 0) {
             throw new RuntimeException(MessageConstant.SELECTED_DATE_CANNOT_ORDER);
         }
-        OrderSetting orderSetting= healthOrderSettingDao.findOrderSettingByDate(oderDate);
-        if (orderSetting.getReservations()==orderSetting.getNumber()){
-throw new RuntimeException(MessageConstant.ORDER_FULL);
+        OrderSetting orderSetting = healthOrderSettingDao.findOrderSettingByDate(oderDate);
+        if (orderSetting.getReservations() == orderSetting.getNumber()) {
+            throw new RuntimeException(MessageConstant.ORDER_FULL);
         }
         Member member = memberDao.findByTelephone(telphone);
 
 
-
-
-
-        if (member!=null){
-Order order=new Order();
-order.setMemberId(member.getId());
-order.setOrderDate(dateFormat);
-order.setSetmealId(Integer.parseInt(orderInfo.get("setmealId").toString()) );
+        if (member != null) {
+            Order order = new Order();
+            order.setMemberId(member.getId());
+            order.setOrderDate(dateFormat);
+            order.setSetmealId(Integer.parseInt(orderInfo.get("setmealId").toString()));
             List<Order> orderList = orderDao.findByCondition(order);
-            if (orderList!=null && orderList.size()>0){
+            if (orderList != null && orderList.size() > 0) {
                 throw new RuntimeException(MessageConstant.HAS_ORDERED);
             }
 
-        }else {
-member=new Member();
+        } else {
+            member = new Member();
             member.setPhoneNumber(telphone);
             member.setSex(orderInfo.get("sex").toString());
             member.setName(orderInfo.get("name").toString());
             member.setIdCard(orderInfo.get("idCard").toString());
 
             member.setRegTime(new Date());
-                       memberDao.add(member);
+            memberDao.add(member);
             System.out.println(member);
 
         }
 
 
-synchronized (MobileOrderService.class){
-    Order newOrder=new Order();
+        synchronized (MobileOrderService.class) {
+            Order newOrder = new Order();
 
-    newOrder.setMemberId(member.getId());
-    newOrder.setOrderDate(dateFormat);
-    newOrder.setOrderType(Order.ORDERTYPE_WEIXIN);
-    newOrder.setOrderStatus(Order.ORDERSTATUS_NO);
-    newOrder.setSetmealId(Integer.parseInt(orderInfo.get("setmealId").toString()));
-    orderDao.add(newOrder);
-    healthOrderSettingDao.addCount(oderDate);
-    return newOrder;
-}
-
-
-
-
-
+            newOrder.setMemberId(member.getId());
+            newOrder.setOrderDate(dateFormat);
+            newOrder.setOrderType(Order.ORDERTYPE_WEIXIN);
+            newOrder.setOrderStatus(Order.ORDERSTATUS_NO);
+            newOrder.setSetmealId(Integer.parseInt(orderInfo.get("setmealId").toString()));
+            orderDao.add(newOrder);
+            healthOrderSettingDao.addCount(oderDate);
+            return newOrder;
+        }
 
 
     }
@@ -117,8 +109,8 @@ synchronized (MobileOrderService.class){
     public Map findById(Integer id) {
         Map byId4Detail = orderDao.findById4Detail(id);
         Date orderDate = (Date) byId4Detail.get("orderDate");
-        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        String orderDateFormat=simpleDateFormat.format(orderDate);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String orderDateFormat = simpleDateFormat.format(orderDate);
         byId4Detail.put("orderDate", orderDateFormat);
         return byId4Detail;
     }
